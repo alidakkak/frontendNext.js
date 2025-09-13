@@ -17,6 +17,9 @@ import { toast } from 'sonner';
 import { fmtDate } from '@/lib/format';
 import { Skeleton } from '@/components/ui/skeleton';
 
+type ManageList = Awaited<ReturnType<typeof fetchMagArticlesManage>>;
+type ManageItem = ManageList['items'][number];
+
 export default function ManageMagazinePage() {
   const { id } = useParams<{ id: string }>();
   const qc = useQueryClient();
@@ -106,7 +109,7 @@ export default function ManageMagazinePage() {
           ) : !list.data?.items.length ? (
             <p className="text-muted-foreground p-4 text-sm">لا يوجد عناصر.</p>
           ) : (
-            list.data.items.map((a) => (
+            list.data.items.map((a: ManageItem) => (
               <div
                 key={a.id}
                 className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"

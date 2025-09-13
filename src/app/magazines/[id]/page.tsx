@@ -3,9 +3,12 @@
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import { fetchMagazine, fetchMagArticles, qk } from '@/lib/queries';
+import { fetchMagazine, fetchMagArticles, qk, fetchMyMagazines } from '@/lib/queries';
 import { fmtDate } from '@/lib/format';
 import { Skeleton } from '@/components/ui/skeleton';
+
+type MagArtsResult = Awaited<ReturnType<typeof fetchMagArticles>>;
+type MagArtItem = MagArtsResult['items'][number];
 
 export default function MagazinePage() {
   const { id } = useParams<{ id: string }>();
@@ -58,7 +61,7 @@ export default function MagazinePage() {
           <p>لا توجد مقالات بعد.</p>
         ) : (
           <ul className="space-y-2">
-            {arts.data.items.map((a) => (
+            {arts.data.items.map((a: MagArtItem) => (
               <li key={a.id} className="flex items-baseline gap-3">
                 {a.publishedAt && (
                   <span className="text-muted-foreground text-xs">({fmtDate(a.publishedAt)})</span>

@@ -26,7 +26,17 @@ export default function NewArticlePage() {
     <section className="space-y-6">
       <h1 className="text-2xl font-bold">مقال جديد</h1>
       <div className="glass-card rounded-2xl p-6">
-        <ArticleForm dir={dir} submitting={m.isPending} onSubmit={(d) => m.mutate(d)} />
+        <ArticleForm
+          dir={dir}
+          submitting={m.isPending}
+          onSubmit={(d) =>
+            m.mutate({
+              title: d.title,
+              summary: d.summary ?? undefined,
+              content: d.content ?? undefined,
+            })
+          }
+        />
       </div>
     </section>
   );

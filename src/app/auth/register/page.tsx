@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, Suspense } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,6 +18,7 @@ function cn(...c: Array<string | false | null | undefined>) {
   return c.filter(Boolean).join(' ');
 }
 
+// ✅ صحّحنا التوقيع: مرّرنا رسائل الخطأ ككائن
 const schema = z
   .object({
     name: z.string().min(2, 'الاسم يجب أن لا يقل عن حرفين').max(80, 'الاسم طويل جدًا'),
@@ -43,7 +44,8 @@ function passwordStrength(pw: string) {
   return (score / 5) * 100; // 0..100
 }
 
-export default function RegisterPage() {
+// ✅ هذا هو المكوّن الداخلي الذي *يستخدم* useSearchParams
+function RegisterInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get('next') || '/';
@@ -105,7 +107,7 @@ export default function RegisterPage() {
       <div className="card-gradient rounded-2xl p-[1px]">
         <div className="glass-card rounded-2xl p-6">
           <form className="space-y-5" onSubmit={handleSubmit(onSubmit)} noValidate>
-            {/* اختيار الدور (Radio Cards) */}
+            {/* اختيار الدور */}
             <div>
               <label className="mb-2 block text-sm font-medium">الدور</label>
 
@@ -179,12 +181,6 @@ export default function RegisterPage() {
                 )}
               />
               {errors.role && <p className="mt-1 text-xs text-red-600">{errors.role.message}</p>}
-
-              {/* بديل مبسّط (اختياري): قائمة منسدلة */}
-              {/* <select {...register('role')} className="mt-2 w-full rounded-lg border px-2 py-2 text-sm">
-                <option value="SUBSCRIBER">Subscriber</option>
-                <option value="PUBLISHER">Publisher</option>
-              </select> */}
             </div>
 
             {/* الاسم */}
@@ -283,7 +279,7 @@ export default function RegisterPage() {
                   className="absolute top-1/2 right-2 -translate-y-1/2 rounded-md p-1 text-zinc-500 hover:text-zinc-700"
                   aria-label={showPw2 ? 'إخفاء كلمة السر' : 'إظهار كلمة السر'}
                 >
-                  {showPw2 ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPw2 ? <EyeOff className="h-4 w-4" /> : <Eye className="و-4 h-4" />}
                 </button>
               </div>
               {errors.confirmPassword && (
@@ -312,5 +308,14 @@ export default function RegisterPage() {
         </div>
       </div>
     </section>
+  );
+}
+
+// ✅ الصفحة المُصدَّرة: تضع Suspense حول المكوّن الذي يستخدم useSearchParams
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div />}>
+      <RegisterInner />
+    </Suspense>
   );
 }

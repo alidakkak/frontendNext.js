@@ -1,16 +1,26 @@
 import { api, type ApiList } from './api';
 
 export const qk = {
-  magazines: (page = 1, pageSize = 12, search = '') =>
+  magazines: (page = 1, pageSize = 20, search = '') =>
     ['magazines', page, pageSize, search] as const,
+
   magazine: (id: string) => ['magazine', id] as const,
-  magArticles: (magId: string, page = 1, pageSize = 10) =>
+
+  magArticles: (magId: string, page = 1, pageSize = 20) =>
     ['mag-articles', magId, page, pageSize] as const,
+
+  magArticlesManage: (magId: string, tab: 'DRAFT' | 'PUBLISHED', page = 1, pageSize = 20) =>
+    ['mag-articles-manage', magId, tab, page, pageSize] as const,
+
   article: (id: string) => ['article', id] as const,
-  comments: (articleId: string, page = 1, pageSize = 10) =>
+
+  comments: (articleId: string, page = 1, pageSize = 20) =>
     ['comments', articleId, page, pageSize] as const,
-  mySubs: (page = 1, pageSize = 10) => ['subs-me', page, pageSize] as const,
-};
+
+  myMags: (page = 1, pageSize = 20) => ['my-mags', page, pageSize] as const,
+
+  mySubs: (page = 1, pageSize = 20) => ['subs-me', page, pageSize] as const,
+} as const;
 
 export async function fetchMagazines(page = 1, pageSize = 12, search = '') {
   const r = await api.get<

@@ -29,7 +29,7 @@ export default function EditArticlePage() {
   });
 
   const save = useMutation({
-    mutationFn: (data: { title: string; summary?: string; content?: string}) =>
+    mutationFn: (data: { title: string; summary?: string; content?: string }) =>
       updateArticle(aid, data),
     onSuccess: async () => {
       toast.success('تم الحفظ');
@@ -110,7 +110,15 @@ export default function EditArticlePage() {
           dir={dir}
           initial={{ title: a.title, summary: a.summary, content: a.content }}
           submitting={save.isPending}
-          onSubmit={(d) => save.mutate(d)}
+          onSubmit={(d) => {
+            const payload = {
+              title: d.title,
+              summary: d.summary ?? undefined,
+              content: d.content ?? undefined,
+            } satisfies { title: string; summary?: string; content?: string };
+
+            save.mutate(payload);
+          }}
         />
       </div>
     </section>

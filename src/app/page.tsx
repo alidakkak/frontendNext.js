@@ -7,6 +7,9 @@ import { fetchMagazines, qk } from '@/lib/queries';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
+type HomeMagsResult = Awaited<ReturnType<typeof fetchMagazines>>;
+type HomeMagItem = HomeMagsResult['items'][number];
+
 export default function HomePage() {
   const { data, isLoading, isError } = useQuery({
     queryKey: qk.magazines(1, 12),
@@ -45,7 +48,7 @@ export default function HomePage() {
       <h1 className="text-2xl font-bold">المجلّات</h1>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {data.items.map((m) => (
+        {data.items.map((m: HomeMagItem) => (
           <Card
             key={m.id}
             className="glass-card group overflow-hidden rounded-2xl border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"

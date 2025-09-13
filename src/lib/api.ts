@@ -1,4 +1,3 @@
-// src/lib/api.ts
 import axios from 'axios';
 import { useAuth } from '@/stores/auth';
 import { toast } from 'sonner';
@@ -23,3 +22,10 @@ api.interceptors.response.use(
     throw err;
   },
 );
+
+export type ApiList<T> = {
+  items: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+};

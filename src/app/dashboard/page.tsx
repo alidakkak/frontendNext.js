@@ -6,6 +6,9 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchMyMagazines, qk } from '@/lib/queries';
 import { useAuth } from '@/stores/auth';
 
+type MyMagsResult = Awaited<ReturnType<typeof fetchMyMagazines>>;
+type MyMagItem = MyMagsResult['items'][number];
+
 export default function DashboardHome() {
   const { user } = useAuth();
   const { data, isLoading, isError } = useQuery({
@@ -33,7 +36,7 @@ export default function DashboardHome() {
         <div className="glass-card rounded-2xl p-6 text-center">لا توجد مجلّات مرتبطة بحسابك.</div>
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {data.items.map((m) => (
+          {data.items.map((m: MyMagItem) => (
             <div key={m.id} className="glass-card overflow-hidden rounded-2xl">
               {m.coverUrl && (
                 <Image

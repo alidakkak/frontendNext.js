@@ -9,6 +9,9 @@ import { fetchMySubscriptions, qk } from '@/lib/queries';
 import { fmtDate, statusText } from '@/lib/format';
 import { useAuth } from '@/stores/auth';
 
+type MySubsResult = Awaited<ReturnType<typeof fetchMySubscriptions>>;
+type MySubItem = MySubsResult['items'][number];
+
 function StatusBadge({ s }: { s: 'ACTIVE' | 'EXPIRED' | 'CANCELED' }) {
   const cls =
     s === 'ACTIVE'
@@ -59,7 +62,7 @@ export default function MySubscriptionsPage() {
       ) : (
         <div className="glass-card overflow-hidden rounded-2xl">
           <div className="grid grid-cols-1 divide-y">
-            {data.items.map((sub) => (
+            {data.items.map((sub: MySubItem) => (
               <div
                 key={sub.id}
                 className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between"

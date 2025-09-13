@@ -27,7 +27,7 @@ export default function NavBar() {
             <Link className="hover:underline" href="/">
               الرئيسية
             </Link>
-            {!isAdmin && (
+            {!isAdmin && user && (
               <Link className="hover:underline" href="/subscriptions">
                 اشتراكاتي
               </Link>
