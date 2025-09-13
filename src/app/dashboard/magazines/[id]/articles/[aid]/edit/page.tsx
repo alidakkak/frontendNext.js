@@ -29,7 +29,7 @@ export default function EditArticlePage() {
   });
 
   const save = useMutation({
-    mutationFn: (data: { title: string; summary?: string; content?: string }) =>
+    mutationFn: (data: { title: string; summary?: string; content?: string}) =>
       updateArticle(aid, data),
     onSuccess: async () => {
       toast.success('تم الحفظ');
